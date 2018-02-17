@@ -13,17 +13,17 @@ export class AddHoldingPage {
  
     private cryptoUnavailable: boolean = false;
     private checkingValidity: boolean = false;
+    private noConnection: boolean = false;
     private cryptoCode: string;
     private displayCurrency: string;
     private amountHolding;
  
     constructor(private navCtrl: NavController, private holdingsProvider: HoldingsProvider) {
- 
     }
  
-    addHolding(): void {
- 
+    addHolding(){
         this.cryptoUnavailable = false;
+        this.noConnection = false;
         this.checkingValidity = true;
  
         let holding = {
@@ -35,20 +35,16 @@ export class AddHoldingPage {
         this.holdingsProvider.verifyHolding(holding).subscribe((result) => {
  
             this.checkingValidity = false;
- 
             if(result.success){
                 this.holdingsProvider.addHolding(holding);
                 this.navCtrl.pop();
             } else {
                 this.cryptoUnavailable = true;
             }
- 
         }, (err) => {   
  
+            this.noConnection = true;
             this.checkingValidity = false;
- 
         });
- 
     }
- 
 }
